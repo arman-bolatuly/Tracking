@@ -8,8 +8,6 @@ import { Categories } from './screens/Categories';
 
 const Stack = createNativeStackNavigator();
 
-
-
 export default function App() {
   return (
     <NavigationContainer theme={theme}>

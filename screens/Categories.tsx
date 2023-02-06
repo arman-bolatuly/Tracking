@@ -1,8 +1,7 @@
-import { useCallback, useState } from 'react';
-import { View, Modal, TextInput, Button, KeyboardAvoidingView, TouchableOpacity, TouchableWithoutFeedback, Animated } from 'react-native';
+import { useState } from 'react';
+import { View, Modal, TextInput, Button, KeyboardAvoidingView, TouchableOpacity, Keyboard } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 import { ColorPicker, fromHsv } from 'react-native-color-picker';
-import { Keyboard } from 'react-native'
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 import { EvilIcons } from '@expo/vector-icons';
 
@@ -10,7 +9,7 @@ import { ListItem } from '../components/ListItem';
 import { theme } from '../theme';
 import { Category } from '../types/category';
 import { CategoryRow } from '../components/CategoryRow';
-import { RectButton } from 'react-native-gesture-handler';
+import { RectButton, ScrollView } from 'react-native-gesture-handler';
 
 export const Categories = ({ navigation }: any) => {
   const [showColorPicker, setShowColorPicker] = useState(false);
@@ -42,6 +41,7 @@ export const Categories = ({ navigation }: any) => {
     setCategories([...categories, { id: Math.random().toString(), name: newName, color: selectedcolor }]);
     setNewName('');
     setSelectedColor(theme.colors.primary);
+    Keyboard.dismiss();
   }
 
 
@@ -53,38 +53,39 @@ export const Categories = ({ navigation }: any) => {
         keyboardVerticalOffset={125}
         style={{ flex: 1, justifyContent: 'space-between', margin: 16, }}
       >
-        <View style={{ flexDirection: 'column', borderRadius: 11, overflow: 'hidden' }}>
-          {categories.map(({ id, color, name }) => (
-            <Swipeable key={id.toString()}
-              renderRightActions={() => {
-                return (
-                  <View
-                    style={{
-                      backgroundColor: theme.colors.error,
-                      width: 75,
-                    }}
-                  >
-                    <RectButton
+        <ScrollView style={{ flex: 1 }}>
+          <View style={{ borderRadius: 11, overflow: 'hidden' }}>
+            {categories.map(({ id, color, name }) => (
+              <Swipeable key={id.toString()}
+                renderRightActions={() => {
+                  return (
+                    <View
                       style={{
-                        flex: 1,
-                        alignItems: 'center',
-                        justifyContent: 'center',
+                        backgroundColor: theme.colors.error,
+                        width: 75,
                       }}
-                      onPress={() => setCategories(categories.filter((category) => category.id !== id))}
                     >
-                      <EvilIcons name='trash' size={40} color='white' />
-                    </RectButton>
-                  </View>
-                );
-              }}>
-              <CategoryRow color={color} name={name} />
-            </Swipeable>
-          ))
-          }
+                      <RectButton
+                        style={{
+                          flex: 1,
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                        }}
+                        onPress={() => setCategories(categories.filter((category) => category.id !== id))}
+                      >
+                        <EvilIcons name='trash' size={40} color='white' />
+                      </RectButton>
+                    </View>
+                  );
+                }}>
+                <CategoryRow color={color} name={name} />
+              </Swipeable>
+            ))
+            }
 
-        </View>
-        <View style={{ flex: 1 }} />
-        <View style={{ display: 'flex', flexDirection: 'row', paddingVertical: 8, alignItems: 'center' }}>
+          </View>
+        </ScrollView>
+        <View style={{ display: 'flex', flexDirection: 'row', paddingVertical: 8, alignItems: 'center', position: 'relative' }}>
           <TouchableOpacity style={{ padding: 12 }} onPress={() => setShowColorPicker(!showColorPicker)}>
             <View style={{ backgroundColor: selectedcolor, width: 24, height: 24, borderRadius: 12, borderWidth: 3, borderColor: 'white' }} />
           </TouchableOpacity>

@@ -13,11 +13,7 @@ export default function App() {
     <NavigationContainer theme={theme}>
       <StatusBar style="light" />
       <Stack.Navigator>
-        <Stack.Screen
-          name="Home"
-          component={Home}
-          options={{ headerShown: false }}
-        />
+        <Stack.Screen name="Home" component={Home} options={{ headerShown: false }} />
         <Stack.Screen name="Categories" component={Categories} />
       </Stack.Navigator>
     </NavigationContainer>

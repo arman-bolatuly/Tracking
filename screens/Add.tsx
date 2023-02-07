@@ -10,14 +10,15 @@ import {
   Platform,
 } from 'react-native';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-// import DateTimePicker from '@react-native-community/datetimepicker';
-// import BottomSheet, { BottomSheetFlatList } from '@gorhom/bottom-sheet';
+import DateTimePicker from '@react-native-community/datetimepicker';
+import BottomSheet, { BottomSheetFlatList } from '@gorhom/bottom-sheet';
 
 // import RealmContext from '../realm';
 import { ListItem } from '../components/ListItem';
-// import { Recurrence } from '../types/recurrence';
+import { Recurrence } from '../types/recurrence';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { theme } from '../theme';
+import { Category } from '../types/category';
 // import { Category } from '../models/category';
 // import { Expense } from '../models/expense';
 
@@ -27,14 +28,14 @@ export const Add = () => {
   // const realm = useRealm();
   // const categories = realm.objects<Category>('Category');
 
-  // const sheetRef = useRef<BottomSheet>(null);
+  const sheetRef = useRef<BottomSheet>(null);
   const snapPoints = useMemo(() => ['25%', '50%', '90%'], []);
 
   const [sheetView, setSheetView] = React.useState<'recurrence' | 'category'>(
     'recurrence'
   );
   const [amount, setAmount] = React.useState('');
-  // const [recurrence, setRecurrence] = React.useState(Recurrence.None);
+  const [recurrence, setRecurrence] = React.useState(Recurrence.None);
   const [date, setDate] = React.useState(new Date());
   const [note, setNote] = React.useState('');
   // const [category, setCategory] = React.useState<Category>(categories[0]);
@@ -43,19 +44,19 @@ export const Add = () => {
   //   setCategory(newCategories[0] ?? []);
   // };
 
-  // const selectRecurrence = (selectedRecurrence: string) => {
-  //   setRecurrence(selectedRecurrence as Recurrence);
-  //   sheetRef.current?.close();
-  // };
+  const selectRecurrence = (selectedRecurrence: string) => {
+    setRecurrence(selectedRecurrence as Recurrence);
+    // sheetRef.current?.close();
+  };
 
-  // const selectCategory = (selectedCategory: Category) => {
-  //   setCategory(selectedCategory);
-  //   sheetRef.current?.close();
-  // };
+  const selectCategory = (selectedCategory: Category) => {
+    // setCategory(selectedCategory);
+    sheetRef.current?.close();
+  };
 
   const clearForm = () => {
     setAmount('');
-    // setRecurrence(Recurrence.None);
+    setRecurrence(Recurrence.None);
     setDate(new Date());
     setNote('');
     // setCategory(categories[0]);
@@ -129,7 +130,7 @@ export const Add = () => {
                 }}
                 onPress={() => {
                   setSheetView('recurrence');
-                  // sheetRef.current?.snapToIndex(1);
+                  sheetRef.current?.snapToIndex(1);
                 }}
               >
                 <Text
@@ -139,33 +140,33 @@ export const Add = () => {
                     fontSize: 16,
                   }}
                 >
-                  {/* {recurrence} */}
+                  {recurrence}
                 </Text>
               </TouchableOpacity>
             }
           />
-          {/* <ListItem
+          <ListItem
             label='Date'
             detail={
               Platform.OS === 'ios' && (
-                // <DateTimePicker
-                //   value={date}
-                //   mode={'date'}
-                //   is24Hour={true}
-                //   themeVariant='dark'
-                //   maximumDate={new Date()}
-                //   minimumDate={
-                //     new Date(
-                //       new Date().getFullYear() - 1,
-                //       new Date().getMonth(),
-                //       new Date().getDate()
-                //     )
-                //   }
-                //   onChange={(event, newDate) => setDate(newDate)}
-                // />
+                <DateTimePicker
+                  value={date}
+                  mode={'date'}
+                  is24Hour={true}
+                  themeVariant='dark'
+                  maximumDate={new Date()}
+                  minimumDate={
+                    new Date(
+                      new Date().getFullYear() - 1,
+                      new Date().getMonth(),
+                      new Date().getDate()
+                    )
+                  }
+                // onChange={(event, newDate) => setDate(newDate)}
+                />
               )
             }
-          /> */}
+          />
           <ListItem
             label='Note'
             detail={
@@ -229,7 +230,7 @@ export const Add = () => {
           </Text>
         </TouchableOpacity>
       </KeyboardAvoidingView>
-      {/* <BottomSheet
+      <BottomSheet
         ref={sheetRef}
         index={-1}
         handleStyle={{
@@ -260,12 +261,18 @@ export const Add = () => {
         )}
         {sheetView === 'category' && (
           <BottomSheetFlatList
-            data={categories[0]?.isValid() ? categories : []}
-            keyExtractor={({ _id }) => _id.toHexString()}
+            // data={categories[0]?.isValid() ? categories : []}
+            data={Object.keys(Recurrence)}
+            // keyExtractor={
+            //   ({ _id }) => _id.toHexString()
+            // }
+            keyExtractor={
+              (i) => i
+            }
             renderItem={({ item }) => (
               <TouchableHighlight
                 style={{ paddingHorizontal: 18, paddingVertical: 12 }}
-                onPress={() => selectCategory(item)}
+              // onPress={() => selectCategory(item)}
               >
                 <View
                   style={{
@@ -276,7 +283,7 @@ export const Add = () => {
                 >
                   <View
                     style={{
-                      backgroundColor: item.color,
+                      // backgroundColor: item.color,
                       width: 12,
                       height: 12,
                       borderRadius: 6,
@@ -285,16 +292,16 @@ export const Add = () => {
                   <Text
                     style={{ color: 'white', fontSize: 18, marginLeft: 12 }}
                   >
-                    {item.name}
+                    {/* {item.name} */}
                   </Text>
-                </View>
-              </TouchableHighlight>
+                </View >
+              </TouchableHighlight >
             )}
             style={{ backgroundColor: theme.colors.card }}
           />
         )}
-      </BottomSheet> */}
-      <InputAccessoryView nativeID='dismissKeyboard'>
+      </BottomSheet >
+      <InputAccessoryView nativeID='dismissKeyboard' >
         <View
           style={{
             height: 44,

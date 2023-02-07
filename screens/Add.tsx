@@ -46,7 +46,7 @@ export const Add = () => {
 
   const selectRecurrence = (selectedRecurrence: string) => {
     setRecurrence(selectedRecurrence as Recurrence);
-    // sheetRef.current?.close();
+    sheetRef.current?.close();
   };
 
   const selectCategory = (selectedCategory: Category) => {
@@ -199,7 +199,7 @@ export const Add = () => {
                 }}
                 onPress={() => {
                   setSheetView('category');
-                  // sheetRef.current?.snapToIndex(1);
+                  sheetRef.current?.snapToIndex(1);
                 }}
               >
                 <Text
